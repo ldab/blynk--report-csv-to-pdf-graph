@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from .forms import UploadFileForm
 from django.core.files.storage import FileSystemStorage
 
-from graph import open_zip, read_csv, 
+from graph import open_zip
 
 from .models import Greeting
 
