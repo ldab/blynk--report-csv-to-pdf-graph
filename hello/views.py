@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from .forms import UploadFileForm
 from django.core.files.storage import FileSystemStorage
 
-from graph import open_zip
+#from graph import open_zip
 
 from .models import Greeting
 
@@ -34,7 +34,7 @@ def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            DO_THE_MAGIC(request.FILES['file'])     #python function goes here!!!!!!!!
+            #DO_THE_MAGIC(request.FILES['file'])     #python function goes here!!!!!!!!
             return HttpResponseRedirect('/success/url/')
     else:
         form = UploadFileForm()
