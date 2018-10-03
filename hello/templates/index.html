@@ -9,33 +9,49 @@
       <img src="https://image.ibb.co/dbetgU/untrol_full_logo.png">
     </a>
     <h1>Blynk Reports .csv to .PDF converter</h1>
-    <p>This is an alpha Python application deployed to Heroku. It's a reasonably simple app - but it works, simply upload your compressed file and it will return the plotted graph in .pdf format.</p>
-
-        <!-- Basic Uppy styles -->
-    <link rel="stylesheet" href="/uppy/uppy.min.css">
-    <div>
-      <div>
-        <h5>autoProceed is on</h5>
-        <!-- Target DOM node #1 -->
-        <div class="UppyDragDrop-One"></div>
-        <!-- Progress bar #1 -->
-        <div class="UppyDragDrop-One-Progress"></div>
-      </div>
-      <div>
-        <h5>autoProceed is off</h5>
-        <!-- Target DOM node #2 -->
-        <div id="UppyDragDrop-Two"></div>
-        <!-- Progress bar #2 -->
-        <div class="UppyDragDrop-Two-Progress"></div>
-        <button class="UppyDragDrop-Two-Upload">Upload</button>
-      </div>
-    </div>
     
-    <p>The server DOES NOT record/store any data, it only converts your data to .pdf and provide the file back.</p>
+    <form class="box" method="post" action="" enctype="multipart/form-data">
+      <div class="box__input">
+        <input class="box__file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
+        <label for="file"><strong>Choose a file</strong><span class="box__dragndrop"> or drag it here</span>.</label>
+        <button class="box__button" type="submit">Upload</button>
+      </div>
+      <div class="box__uploading">Uploading&hellip;</div>
+      <div class="box__success">Done!</div>
+      <div class="box__error">Error! <span></span>.</div>
+    </form>
+    
   </div>
 </div>
 
 <div class="container">
+    <div class="jumbotron text-center">
+        <p>This is an alpha Python application deployed to Heroku. It's a reasonably simple app - but it works, simply upload your compressed file and it will return the plotted graph in .pdf format.</p>
+
+        <!-- Basic Uppy styles -->
+        <link rel="stylesheet" href="/staticfiles/admin/css/drag and drop.css">
+        <div>
+          <div>
+            <h5>autoProceed is on</h5>
+            <!-- Target DOM node #1 -->
+            <div class="UppyDragDrop-One"></div>
+            <!-- Progress bar #1 -->
+            <div class="UppyDragDrop-One-Progress"></div>
+          </div>
+          <div>
+            <h5>autoProceed is off</h5>
+            <!-- Target DOM node #2 -->
+            <div id="UppyDragDrop-Two"></div>
+            <!-- Progress bar #2 -->
+            <div class="UppyDragDrop-Two-Progress"></div>
+            <button class="UppyDragDrop-Two-Upload">Upload</button>
+          </div>
+        </div>
+        <p></p>
+        <div class="alert alert-warning text-center" role="alert">
+          The server DOES NOT record/store any data, it only converts your data to .pdf and provide the file back.
+        </div>
+    </div>
   <div class="alert alert-info text-center" role="alert">
     To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a href="https://devcenter.heroku.com/articles/getting-started-with-python" class="alert-link">Getting Started with Python on Heroku</a> tutorial.
   </div>
