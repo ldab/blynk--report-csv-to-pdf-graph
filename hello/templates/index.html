@@ -11,31 +11,32 @@
     <h1>Blynk Reports .csv to .PDF converter</h1>
     <p>This is an alpha Python application deployed to Heroku. It's a reasonably simple app - but it works, simply upload your compressed file and it will return the plotted graph in .pdf format.</p>
 
-    <!doctype html>
-    <html>
-      <head>
-        <meta charset="utf-8">
-        <title>Uppy</title>
-        <link href="https://transloadit.edgly.net/releases/uppy/v0.27.5/dist/uppy.min.css" rel="stylesheet">
-      </head>
-      <body>
-        <div id="drag-drop-area"></div>
-    
-        <script src="https://transloadit.edgly.net/releases/uppy/v0.27.5/dist/uppy.min.js"></script>
-        <script>
-          var uppy = Uppy.Core()
-            .use(Uppy.Dashboard, {
-              inline: true,
-              target: '#drag-drop-area'
-            })
-            .use(Uppy.Tus, {endpoint: 'http://localhost:5000/test'})
-    
-          uppy.on('complete', (result) => {
-            console.log(`Upload complete! We’ve uploaded these files: ${result.successful}`)
-          })
-        </script>
-      </body>
-    </html>
+    <!-- Basic Uppy styles -->
+<link rel="stylesheet" href="/uppy/uppy.min.css">
+
+<div>
+  <div>
+    <h5>autoProceed is on</h5>
+
+    <!-- Target DOM node #1 -->
+    <div class="UppyDragDrop-One"></div>
+
+    <!-- Progress bar #1 -->
+    <div class="UppyDragDrop-One-Progress"></div>
+  </div>
+
+  <div>
+    <h5>autoProceed is off</h5>
+
+    <!-- Target DOM node #2 -->
+    <div id="UppyDragDrop-Two"></div>
+
+    <!-- Progress bar #2 -->
+    <div class="UppyDragDrop-Two-Progress"></div>
+
+    <button class="UppyDragDrop-Two-Upload">Upload</button>
+  </div>
+</div>
     
   </div>
 </div>
