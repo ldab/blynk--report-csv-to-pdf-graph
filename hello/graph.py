@@ -4,15 +4,17 @@ Open Zip file, plot the graph and save it as a pdf.
 '''
 
 from datetime import datetime, date, time
-import zipfile													#to manipulate zip
-import shutil														#to delete folder
-import csv															#read .csv file
+import zipfile												#to manipulate zip
+import shutil													#to delete folder
+import csv														#read .csv file
 import numpy as np
 
 # Matplotlib in a web application server: do this before importing pylab or pyplot
 import matplotlib
-matplotlib.use('Agg')
+#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.ticker import AutoMinorLocator, MultipleLocator, FuncFormatter
 
 X, Y = [], []
 
@@ -41,6 +43,7 @@ def read_csv(csv_filepath):
       table_row.append(row)
       dt = datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S")
       X.append(dt)
+      print(type(X[0]))
       r_float = round(float(row[1]),1)
       Y.append(r_float)
       print(row)
@@ -60,26 +63,48 @@ read_csv(csv_file)
 ylabel = y_label(csv_file)
 
 #Graph
-fig = plt.figure()
-plt.grid(color='k', linestyle='-', linewidth=0.5)
-plt.plot(X, Y)
+gridsize = (3, 1) #3 lines and 1 column
+fig = plt.figure(figsize=(24, 8))
+ax = plt.subplot2grid(gridsize, (0, 0), colspan=1, rowspan=2)
+#ax = fig.add_subplot(2, 1, 1)
+
+dateFmt = mdates.DateFormatter('%d-%m-%Y')
+minorFmt = mdates.DateFormatter('%H:%M')
+ax.xaxis.set_major_locator(MultipleLocator(0.2))
+ax.xaxis.set_minor_locator(AutoMinorLocator(5))
+ax.yaxis.set_major_locator(MultipleLocator(1.000))
+ax.yaxis.set_minor_locator(AutoMinorLocator(4))
+ax.xaxis.set_major_formatter(dateFmt)
+ax.xaxis.set_minor_formatter(minorFmt)
+
+plt.xticks(rotation=45)
+plt.setp(ax.xaxis.get_minorticklabels(), rotation=45)
+
+ax.grid(color='k', linestyle='-', linewidth=0.5)
+ax.plot(X, Y)
+
 #x_range = np.arange(X[0], X[-1])
 #plt.xticks(x_range)
-plt.ylabel(ylabel)
-plt.title('SOME TITLE')
+ax.set_ylabel(ylabel)
+ax.set_title('SOME TITLE')
+
+#plt.ylabel(ylabel)
+#plt.title('SOME TITLE')
 
 #Table
 columns = ('Date', ylabel)
+#columns = ('','Date', ylabel)
 
 #Roud data to 1 decimal place
 for row in table_row:
   row[1] = round(float(row[1]),1)
 rows = table_row
 # Add a table at the bottom of the axes
-the_table = plt.table(cellText=rows, colLabels=columns, loc='bottom')
+#the_table = fig.add_subplot(2, 1, 2)
+#plt.table(cellText=rows, colLabels=columns, loc='bottom')
 
 # Adjust layout to make room for the table:
-plt.subplots_adjust(left=0.1, bottom=0.4)
+#plt.subplots_adjust(left=0.1, bottom=0.3)
 
 plt.show()
 
