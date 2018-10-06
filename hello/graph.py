@@ -59,14 +59,14 @@ def y_label(csv_path):
 open_zip(csv_path)
 read_csv(csv_file)
 
-#matlib stuff
+#Recover the Y lable based on the file name
 ylabel = y_label(csv_file)
 
 #Graph
-gridsize = (3, 1) #3 lines and 1 column
+gridsize = (3, 1)                               #3 rows and 1 column
 fig = plt.figure(figsize=(11.69,8.27))
-ax = plt.subplot2grid(gridsize, (0, 0), colspan=1, rowspan=2)
-#ax = fig.add_subplot(2, 1, 1)
+ax = plt.subplot2grid(gridsize, (0, 0), rowspan=2)
+tx= plt.subplot2grid((3,6), (2, 1), colspan=4)
 
 dateFmt = mdates.DateFormatter('%d-%m-%Y')
 minorFmt = mdates.DateFormatter('%H:%M')
@@ -77,14 +77,6 @@ ax.yaxis.set_minor_locator(AutoMinorLocator(4))
 ax.xaxis.set_major_formatter(dateFmt)
 ax.xaxis.set_minor_formatter(minorFmt)
 
-plt.xticks(rotation=45)
-plt.setp(ax.xaxis.get_minorticklabels(), rotation=45)
-
-ax.grid(color='k', linestyle='-', linewidth=0.5)
-ax.plot(X, Y)
-
-#x_range = np.arange(X[0], X[-1])
-#plt.xticks(x_range)
 ax.set_ylabel(ylabel)
 ax.set_title('SOME TITLE')
 
@@ -107,15 +99,24 @@ MinTime = table_row[MinIndex][0]
 print(MaxTime)
 print(MinTime)
 
-tabeCont = [['Maximum', yMax, MaxTime], ['Minimum', yMin, MinTime], ['Mean', yAverage, ''], ['Median', yMedian, '']]
+tableCont = [['Maximum', yMax, MaxTime], ['Minimum', yMin, MinTime], ['Mean', yAverage, ''], ['Average', yMedian, '']]
 columns = ('', ylabel, 'Date')
 
 # Add a table at the bottom of the axes
-#the_table = fig.add_subplot(2, 1, 2)
-plt.table(cellText=tabeCont, colLabels=columns, loc='bottom')
+tx.axis('tight')
+tx.axis('off')
+the_table  = tx.table(cellText=tableCont, colLabels=columns, loc='lower center')
+the_table.set_fontsize(36)
+the_table.scale(1, 1.3)
 
 # Adjust layout to make room for the table:
-plt.subplots_adjust(left=0.1, bottom=0.3)
+#plt.subplots_adjust(left=0.1, bottom=0.3)
+
+plt.setp(ax.xaxis.get_majorticklabels(), rotation=45)
+plt.setp(ax.xaxis.get_minorticklabels(), rotation=45)
+
+ax.grid(color='k', linestyle='-', linewidth=0.5)
+ax.plot(X, Y)
 
 plt.show()
 

@@ -35,6 +35,15 @@ def upload_file(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             #DO_THE_MAGIC(request.FILES['file'])     #python function goes here!!!!!!!!
+            if above works
+                response = HttpResponse(pdf, content_type='application/pdf')
+                filename = "Invoice_%s.pdf" %("12341231")
+                content = "inline; filename='%s'" %(filename)
+                download = request.GET.get("download")
+                if download:
+                    content = "attachment; filename='%s'" %(filename)
+                response['Content-Disposition'] = content
+            #return response
             return HttpResponseRedirect('/success/url/')
     else:
         form = UploadFileForm()
@@ -72,4 +81,3 @@ def db(request):
     greetings = Greeting.objects.all()
 
     return render(request, 'db.html', {'greetings': greetings})
-
