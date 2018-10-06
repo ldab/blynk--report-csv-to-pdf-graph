@@ -6,49 +6,79 @@ Open Zip file, plot the graph and save it as a pdf.
 from datetime import datetime, date, time
 import statistics                     #calculate median
 import zipfile												#to manipulate zip
-import shutil													#to delete folder
+import shutil, os											#to delete folder
 import csv														#read .csv file
 import numpy as np
+import random
+import string
 
 # Matplotlib in a web application server: do this before importing pylab or pyplot
 import matplotlib
-#matplotlib.use('Agg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from matplotlib.ticker import AutoMinorLocator, MultipleLocator, FuncFormatter
+from matplotlib.ticker import AutoMinorLocator, MultipleLocator, FuncFormatter, LinearLocator, AutoLocator
 
-X, Y = [], []
+#X, Y = [], []
 
-csv_file = 'htu21d_84938_Humidity.csv'
 csv_path = 'C:\\Users\\leonardo\\Downloads\\My Files\\' #ADD site path here
-newfolder = 'new folder'
-temp_folder = csv_path + newfolder
+csv_files = []
+tempFolder = ''
 table_row = []
 
 def open_zip(file_path):
   '''
   Open zip file and extract to \new folder
   '''
-  newfolder = 'new folder'
-  fantasy_zip = zipfile.ZipFile(file_path + 'l.bispo@live.com_blynkpvukzhpz_39740_2018-09-11.zip')
-  fantasy_zip.extractall(file_path + newfolder)
+  zip_File = ''
+  global tempFolder
+  #generate random number/name for new folder
+  tempFolder = 'temp' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+  tempFolder = file_path + tempFolder
+  for x in os.listdir(file_path):       #TODO REPLACE WITH A LAMBDA FUNCTION
+    if x.endswith('.zip'):
+      zip_File = x
+  
+  zip_path = file_path + zip_File
+  fantasy_zip = zipfile.ZipFile(zip_path)
+  fantasy_zip.extractall(tempFolder)
   fantasy_zip.close()
+  #now delete zip file
+  os.unlink(zip_path)
     
-def read_csv(csv_filepath):
+def read_csv():
   '''
   read extracted .csv file and create X and Y lists
-  csv_f = "FILE PATH"
   '''
-  csv_filepath = csv_path + 'new folder\\' + csv_filepath
-  with open(csv_filepath, newline='', encoding='utf-16') as f:
-    reader = csv.reader(f)
-    for row in reader:
-      table_row.append(row)
-      dt = datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S")
-      X.append(dt)
-      r_float = round(float(row[1]),1)
-      Y.append(r_float)
-      print(row)
+  global tempFolder
+  
+  #find .csv files in the temp folder
+  for f in os.listdir(tempFolder):    #TODO REPLACE WITH A LAMBDA FUNCTION
+    if f.endswith('.csv'):
+      csv_files.append(f)
+  
+  #for every file, open, print PDF and save a list with X and Y...
+  for _csv in csv_files:
+    X, Y = [], []
+    csv_filepath = ''
+    csv_filepath = tempFolder + '\\' + _csv
+    with open(csv_filepath, newline='', encoding='utf-16') as f:
+      reader = csv.reader(f)
+      for row in reader:
+        table_row.append(row)
+        dt = datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S")
+        X.append(dt)
+        r_float = round(float(row[1]),1)
+        Y.append(r_float)
+        #print(row)
+    print_save(_csv, X, Y)
+
+def round_me(n, dec=1):
+  '''
+  round the number to x decimal places
+  '''
+  n = round(float(n), dec)
+  return n
 
 def y_label(csv_path):
   '''
@@ -58,79 +88,87 @@ def y_label(csv_path):
   ylabel = ylabel[-1].split('.')
   return ylabel[0]
 
+def x_label(csv_path):
+  '''
+  Return X label based on the file name eg. XLABEL_xxx_xxx_XXXX.csv
+  '''
+  xlabel = csv_path.split('_')
+  return xlabel[0]
+
+def print_save(csv_doc, X, Y):
+  #Graph
+  gridsize = (3, 1)                               #3 rows and 1 column
+  fig = plt.figure(figsize=(11.69,8.27))          #A4 size
+  ax = plt.subplot2grid(gridsize, (0, 0), rowspan=2)
+  tx= plt.subplot2grid((3,6), (2, 1), colspan=4)
+  
+  #TODO tide it up, define minor and major
+  dateFmt = mdates.DateFormatter('%d-%m-%Y')
+  hourFmt = mdates.DateFormatter('%H:%M')
+  dayFmt = mdates.DateFormatter('%d-%m')
+
+  ax.xaxis.set_major_locator(LinearLocator(7))
+  ax.xaxis.set_minor_locator(AutoMinorLocator())
+  #ax.xaxis.set_minor_locator(LinearLocator(31))
+
+  # Else if longer than a daily, Major = Days, Minor = Hours
+  if len(X) <= (60*24*7):
+    ax.xaxis.set_major_formatter(dateFmt)
+    ax.xaxis.set_minor_formatter(hourFmt)
+
+  # Else if longer than weekly, Major = Full date, Minor = day
+  else:
+    ax.xaxis.set_major_formatter(dateFmt)
+    ax.xaxis.set_minor_formatter(dayFmt)
+
+  ax.yaxis.set_major_locator(LinearLocator(10))
+  #ax.yaxis.set_major_locator(AutoLocator())
+  ax.yaxis.set_minor_locator(AutoMinorLocator(4))
+  ##########################################################
+
+  ylabel = y_label(csv_doc)
+  title = x_label(csv_doc)
+  ax.set_ylabel(ylabel)
+  ax.set_title(title, fontsize=38)
+
+  #calculate stuff to put in the table
+  yMedian = round_me(statistics.median(Y))
+  yAverage = round_me(statistics.mean(Y))
+  yMax = round_me(max(Y))
+  yMin = round_me(min(Y))
+  MaxIndex = Y.index(max(Y))
+  MinIndex = Y.index(min(Y))
+  MaxTime = table_row[MaxIndex][0]
+  MinTime = table_row[MinIndex][0]
+ 
+  #create table
+  tableCont = [['Maximum', yMax, MaxTime], ['Minimum', yMin, MinTime], ['Average', yAverage, ''], ['Median', yMedian, '']]
+  columns = ('', ylabel, 'Date')
+
+  #Add table at the bottom of the page
+  tx.axis('tight')
+  tx.axis('off')
+  the_table  = tx.table(cellText=tableCont, colLabels=columns, loc='lower center')
+  the_table.set_fontsize(36)
+  the_table.scale(1, 1.3)
+
+  # Rotate axis 45degress
+  plt.setp(ax.xaxis.get_majorticklabels(), rotation=45)
+  plt.setp(ax.xaxis.get_minorticklabels(), rotation=45)
+
+  ax.grid(color='k', linestyle='-', linewidth=0.5)
+  ax.plot(X, Y)
+
+  #do not need it if now displaying image
+  #plt.show()
+
+  #save file to .zip file path + file name + .pdf
+  fig.savefig(tempFolder + '\\' + csv_doc.split('.')[0] + '.pdf')
+
 open_zip(csv_path)
-read_csv(csv_file)
+read_csv()
 
-#Recover the Y lable based on the file name
-ylabel = y_label(csv_file)
-
-#Graph
-gridsize = (3, 1)                               #3 rows and 1 column
-fig = plt.figure(figsize=(11.69,8.27))
-ax = plt.subplot2grid(gridsize, (0, 0), rowspan=2)
-tx= plt.subplot2grid((3,6), (2, 1), colspan=4)
-
-dateFmt = mdates.DateFormatter('%d-%m-%Y')
-minorFmt = mdates.DateFormatter('%H:%M')
-ax.xaxis.set_major_locator(MultipleLocator(0.2))
-ax.xaxis.set_minor_locator(AutoMinorLocator(5))
-ax.yaxis.set_major_locator(MultipleLocator(1.000))
-ax.yaxis.set_minor_locator(AutoMinorLocator(4))
-ax.xaxis.set_major_formatter(dateFmt)
-ax.xaxis.set_minor_formatter(minorFmt)
-
-ax.set_ylabel(ylabel)
-ax.set_title('SOME TITLE')
-
-#Roud data to 1 decimal place
-def round_me(n, dec=1):
-  '''
-  round the number to x decimal places
-  '''
-  n = round(float(n), dec)
-  return n
-
-yMedian = round_me(statistics.median(Y))
-yAverage = round_me(statistics.mean(Y))
-yMax = round_me(max(Y))
-yMin = round_me(min(Y))
-MaxIndex = Y.index(max(Y))
-MinIndex = Y.index(min(Y))
-MaxTime = table_row[MaxIndex][0]
-MinTime = table_row[MinIndex][0]
-print(MaxTime)
-print(MinTime)
-
-tableCont = [['Maximum', yMax, MaxTime], ['Minimum', yMin, MinTime], ['Mean', yAverage, ''], ['Average', yMedian, '']]
-columns = ('', ylabel, 'Date')
-
-# Add a table at the bottom of the axes
-tx.axis('tight')
-tx.axis('off')
-the_table  = tx.table(cellText=tableCont, colLabels=columns, loc='lower center')
-the_table.set_fontsize(36)
-the_table.scale(1, 1.3)
-
-# Adjust layout to make room for the table:
-#plt.subplots_adjust(left=0.1, bottom=0.3)
-
-plt.setp(ax.xaxis.get_majorticklabels(), rotation=45)
-plt.setp(ax.xaxis.get_minorticklabels(), rotation=45)
-
-ax.grid(color='k', linestyle='-', linewidth=0.5)
-ax.plot(X, Y)
-
-plt.show()
-
-#save file to .zip file path + file name + .pdf
-fig.savefig(csv_path + csv_file.split('.')[0] + '.pdf')
-
-DELETE = input('Delete new folder?\n Y or N? ')
-if DELETE[0].lower() == 'y':
-    print('Removing temporary folder......')
-    shutil.rmtree(temp_folder)
-else:
-    print('Keep Temp folder')
+print('Removing temporary folder......')
+#shutil.rmtree(tempFolder)
 
 #TODO Create a date list in order to compare data and avoid plotting when no data is available
-#MULTIPLE PAGES PDF
