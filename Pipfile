@@ -7,6 +7,12 @@ django = "*"
 gunicorn = "*"
 django-heroku = "*"
 requests = "*"
+numpy = "*"
+statistics = "*"
+zipfile = "*"
+shutil = "*"
+matplotlib = "*"
+csv = "*"
 
 [requires]
 python_version = "3.7"
