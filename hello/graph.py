@@ -20,7 +20,9 @@ from matplotlib.ticker import AutoMinorLocator, MultipleLocator, FuncFormatter
 X, Y = [], []
 
 csv_file = 'htu21d_84938_Humidity.csv'
-csv_path = 'C:\\Users\\leonardo\\Downloads\\'
+csv_path = 'C:\\Users\\leonardo\\Downloads\\My Files\\' #ADD site path here
+newfolder = 'new folder'
+temp_folder = csv_path + newfolder
 table_row = []
 
 def open_zip(file_path):
@@ -126,7 +128,7 @@ fig.savefig(csv_path + csv_file.split('.')[0] + '.pdf')
 DELETE = input('Delete new folder?\n Y or N? ')
 if DELETE[0].lower() == 'y':
     print('Removing temporary folder......')
-    shutil.rmtree('C:\\Users\\leonardo\\Downloads\\new folder')
+    shutil.rmtree(temp_folder)
 else:
     print('Keep Temp folder')
 
