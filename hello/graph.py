@@ -25,12 +25,13 @@ csv_path = 'C:\\Users\\leonardo\\Downloads\\My Files\\' #ADD site path here
 csv_files = []
 tempFolder = ''
 table_row = []
+zip_File = ''
 
 def open_zip(file_path):
   '''
   Open zip file and extract to \new folder
   '''
-  zip_File = ''
+  global zip_File
   global tempFolder
   #generate random number/name for new folder
   tempFolder = 'temp' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
@@ -167,6 +168,17 @@ def print_save(csv_doc, X, Y):
 
 open_zip(csv_path)
 read_csv()
+
+#compress it
+fantasy_zip = zipfile.ZipFile(tempFolder + '\\' + zip_File, 'w')
+ 
+for folder, subfolders, files in os.walk(tempFolder):
+ 
+    for file in files:
+        if file.endswith('.pdf'):
+            fantasy_zip.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), tempFolder), compress_type = zipfile.ZIP_DEFLATED)
+ 
+fantasy_zip.close()
 
 print('Removing temporary folder......')
 #shutil.rmtree(tempFolder)
