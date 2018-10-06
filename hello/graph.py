@@ -4,6 +4,7 @@ Open Zip file, plot the graph and save it as a pdf.
 '''
 
 from datetime import datetime, date, time
+import statistics                     #calculate median
 import zipfile												#to manipulate zip
 import shutil													#to delete folder
 import csv														#read .csv file
@@ -43,7 +44,6 @@ def read_csv(csv_filepath):
       table_row.append(row)
       dt = datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S")
       X.append(dt)
-      print(type(X[0]))
       r_float = round(float(row[1]),1)
       Y.append(r_float)
       print(row)
@@ -64,7 +64,7 @@ ylabel = y_label(csv_file)
 
 #Graph
 gridsize = (3, 1) #3 lines and 1 column
-fig = plt.figure(figsize=(24, 8))
+fig = plt.figure(figsize=(11.69,8.27))
 ax = plt.subplot2grid(gridsize, (0, 0), colspan=1, rowspan=2)
 #ax = fig.add_subplot(2, 1, 1)
 
@@ -88,23 +88,34 @@ ax.plot(X, Y)
 ax.set_ylabel(ylabel)
 ax.set_title('SOME TITLE')
 
-#plt.ylabel(ylabel)
-#plt.title('SOME TITLE')
-
-#Table
-columns = ('Date', ylabel)
-#columns = ('','Date', ylabel)
-
 #Roud data to 1 decimal place
-for row in table_row:
-  row[1] = round(float(row[1]),1)
-rows = table_row
+def round_me(n, dec=1):
+  '''
+  round the number to x decimal places
+  '''
+  n = round(float(n), dec)
+  return n
+
+yMedian = round_me(statistics.median(Y))
+yAverage = round_me(statistics.mean(Y))
+yMax = round_me(max(Y))
+yMin = round_me(min(Y))
+MaxIndex = Y.index(max(Y))
+MinIndex = Y.index(min(Y))
+MaxTime = table_row[MaxIndex][0]
+MinTime = table_row[MinIndex][0]
+print(MaxTime)
+print(MinTime)
+
+tabeCont = [['Maximum', yMax, MaxTime], ['Minimum', yMin, MinTime], ['Mean', yAverage, ''], ['Median', yMedian, '']]
+columns = ('', ylabel, 'Date')
+
 # Add a table at the bottom of the axes
 #the_table = fig.add_subplot(2, 1, 2)
-#plt.table(cellText=rows, colLabels=columns, loc='bottom')
+plt.table(cellText=tabeCont, colLabels=columns, loc='bottom')
 
 # Adjust layout to make room for the table:
-#plt.subplots_adjust(left=0.1, bottom=0.3)
+plt.subplots_adjust(left=0.1, bottom=0.3)
 
 plt.show()
 
