@@ -8,6 +8,7 @@ from django.conf import settings
 from django.http import HttpResponseRedirect
 from .forms import UploadFileForm
 from django.core.files.storage import FileSystemStorage
+from .graph import open_zip, read_csv, compress_it
 
 #from graph import open_zip
 
@@ -19,50 +20,32 @@ def index(request):
     #UploadFileform()
     return render(request, 'index.html')
 
-def simple_upload(request):
-    if request.method == 'POST' and request.FILES['myfile']:
-        myfile = request.FILES['myfile']
-        fs = FileSystemStorage()
-        filename = fs.save(myfile.name, myfile) # saves the file to `media` folder
-        uploaded_file_url = fs.url(filename)    # gets the url
-        return render(request, 'core/simple_upload.html', {
-            'uploaded_file_url': uploaded_file_url
-        })
-    return render(request, 'core/simple_upload.html')
-
 def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             handle_uploaded_file(request.FILES['file'])
-            return HttpResponseRedirect('/success/url/')
+            return HttpResponseRedirect('/')
     else:
         form = UploadFileForm()
     return render(request, 'upload.html', {'form': form})
 
-def upload(request):
-    if request.method == 'POST':
-      form = UploadFileForm(request.POST, request.FILES)
-      if form.is_valid():
-        handlezipfile(request.FILES['file'])
-        return HttpResponseRedirect('/upload_successful')
-    else:
-      form = UploadFileForm()
-    context = {'form': form}
-    context.update(csrf(request))
-    return render_to_response('upload.html', context)
+def handle_uploaded_file(path):
+    open_zip(path)
+    read_csv()
+    compress_it()
 
-def model_form_upload(request):
-    if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = DocumentForm()
-    return render(request, 'core/model_form_upload.html', {
-        'form': form
-    })
+    response = HttpResponse(pdf, content_type='application/pdf')
+    filename = "Invoice_%s.pdf" %("12341231")
+    content = "inline; filename='%s'" %(filename)
+    download = request.GET.get("download")
+    if download:
+        content = "attachment; filename='%s'" %(filename)
+    response['Content-Disposition'] = content
+    return response
+    #else: return HttpResponse("Not found")
+
+    shutil.rmtree(tempFolder)
 
 def db(request):
 

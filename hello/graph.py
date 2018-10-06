@@ -19,12 +19,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.ticker import AutoMinorLocator, MultipleLocator, FuncFormatter, LinearLocator, AutoLocator
 
-#X, Y = [], []
-
 csv_path = 'C:\\Users\\leonardo\\Downloads\\My Files\\' #ADD site path here
-csv_files = []
 tempFolder = ''
-table_row = []
 zip_File = ''
 
 def open_zip(file_path):
@@ -38,7 +34,7 @@ def open_zip(file_path):
   tempFolder = file_path + tempFolder
   for x in os.listdir(file_path):       #TODO REPLACE WITH A LAMBDA FUNCTION
     if x.endswith('.zip'):
-      zip_File = x
+      zip_File = x                      #Change this if want to process multiple zip files
   
   zip_path = file_path + zip_File
   fantasy_zip = zipfile.ZipFile(zip_path)
@@ -52,7 +48,7 @@ def read_csv():
   read extracted .csv file and create X and Y lists
   '''
   global tempFolder
-  
+  csv_files = []
   #find .csv files in the temp folder
   for f in os.listdir(tempFolder):    #TODO REPLACE WITH A LAMBDA FUNCTION
     if f.endswith('.csv'):
@@ -60,7 +56,7 @@ def read_csv():
   
   #for every file, open, print PDF and save a list with X and Y...
   for _csv in csv_files:
-    X, Y = [], []
+    X, Y, table_row = [], [], []
     csv_filepath = ''
     csv_filepath = tempFolder + '\\' + _csv
     with open(csv_filepath, newline='', encoding='utf-16') as f:
@@ -139,8 +135,8 @@ def print_save(csv_doc, X, Y):
   yMin = round_me(min(Y))
   MaxIndex = Y.index(max(Y))
   MinIndex = Y.index(min(Y))
-  MaxTime = table_row[MaxIndex][0]
-  MinTime = table_row[MinIndex][0]
+  MaxTime = X[MaxIndex]
+  MinTime = X[MinIndex]
  
   #create table
   tableCont = [['Maximum', yMax, MaxTime], ['Minimum', yMin, MinTime], ['Average', yAverage, ''], ['Median', yMedian, '']]
@@ -166,21 +162,26 @@ def print_save(csv_doc, X, Y):
   #save file to .zip file path + file name + .pdf
   fig.savefig(tempFolder + '\\' + csv_doc.split('.')[0] + '.pdf')
 
+def compress_it():
+  '''
+  Compress .pdf files saved on the temp folder
+  '''
+  fantasy_zip = zipfile.ZipFile(tempFolder + '\\' + zip_File, 'w')
+  
+  for folder, subfolders, files in os.walk(tempFolder):
+  
+      for file in files:
+          if file.endswith('.pdf'):
+              fantasy_zip.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), tempFolder), compress_type = zipfile.ZIP_DEFLATED)
+  
+  fantasy_zip.close()
+
 open_zip(csv_path)
 read_csv()
-
-#compress it
-fantasy_zip = zipfile.ZipFile(tempFolder + '\\' + zip_File, 'w')
- 
-for folder, subfolders, files in os.walk(tempFolder):
- 
-    for file in files:
-        if file.endswith('.pdf'):
-            fantasy_zip.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), tempFolder), compress_type = zipfile.ZIP_DEFLATED)
- 
-fantasy_zip.close()
+compress_it()
 
 print('Removing temporary folder......')
+# DOWNLOAD COMPRESSED FILE!!!
 #shutil.rmtree(tempFolder)
 
 #TODO Create a date list in order to compare data and avoid plotting when no data is available
