@@ -28,6 +28,8 @@ def upload_file():
             return redirect(url_for('error'))
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            print('saving file to ')
+            print(os.path.join(UPLOAD_FOLDER, filename))
             file.save(os.path.join(UPLOAD_FOLDER, filename))
 
             open_zip(os.path.join(UPLOAD_FOLDER, filename), UPLOAD_FOLDER)
