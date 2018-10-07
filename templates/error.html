@@ -1,0 +1,9 @@
+<!doctype html>
+<title>Error Page!</title>
+{% if name %}
+  <h1>Error: {{ name }}!</h1>
+  <p><a href="/">Return Home</a></p>
+{% else %}
+  <h1>File not allowed!</h1>
+  <p><a href="/">Return Home</a></p>
+{% endif %}
