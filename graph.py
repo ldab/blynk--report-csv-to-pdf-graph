@@ -44,7 +44,6 @@ def open_zip(file_path, upload_folder):
 
   # But we will parse the zip that has already been uploaded
   zip_path = file_path
-  print(zip_path)
   
   fantasy_zip = zipfile.ZipFile(zip_path)
   fantasy_zip.extractall(tempFolder)
@@ -68,7 +67,7 @@ def read_csv():
   for _csv in csv_files:
     X, Y, table_row = [], [], []
     csv_filepath = ''
-    csv_filepath = tempFolder + '\\' + _csv
+    csv_filepath = tempFolder + '/' + _csv
     with open(csv_filepath, newline='', encoding='utf-16') as f:
       reader = csv.reader(f)
       for row in reader:
@@ -170,20 +169,22 @@ def print_save(csv_doc, X, Y):
   #plt.show()
 
   #save file to .zip file path + file name + .pdf
-  fig.savefig(tempFolder + '\\' + csv_doc.split('.')[0] + '.pdf')
+  fig.savefig(tempFolder + '/' + csv_doc.split('.')[0] + '.pdf')
 
 def compress_it(zip_name):
   '''
   Compress .pdf files saved on the temp folder
   '''
-  fantasy_zip = zipfile.ZipFile(tempFolder + '\\' + zip_name, 'w')
-  
+  fantasy_zip = zipfile.ZipFile(tempFolder + '/' + zip_name, 'w')
+    
   for folder, subfolders, files in os.walk(tempFolder):
   
       for file in files:
           if file.endswith('.pdf'):
               fantasy_zip.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), tempFolder), compress_type = zipfile.ZIP_DEFLATED)
   
+  print('compressed and now saving')
+
   fantasy_zip.close()
 
 #open_zip(csv_path)
