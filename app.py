@@ -34,11 +34,12 @@ def upload_file():
             read_csv()
             temp_folder = compress_it(filename)
             
-            return redirect('/success/')    
-        
-            #delete_folder()
+            return send_from_directory(temp_folder + '/',
+                               filename, as_attachment=True)
 
-            #return render_template('index.html', name='confirm')
+            delete_folder()
+
+            return render_template('index.html', name='confirm')
         
         else: return redirect('/error/File not Allowed')
     return render_template('index.html')
@@ -47,18 +48,6 @@ def upload_file():
 @app.route('/error/<name>')
 def error(name=None):
     return render_template('error.html', name=name)
-
-@app.route('/success/')
-def success():
-    @after_this_request
-    def delete_it():
-        delete_folder()
-        return render_template('index.html', name='confirm')
-    
-    return send_from_directory(temp_folder + '/',
-                               filename, as_attachment=True)
-    
-
 
 @app.route('/uploads/<path:filename>')
 def download_file(filename):
