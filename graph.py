@@ -32,7 +32,8 @@ def open_zip(file_path, upload_folder):
   
   #generate random number/name for new folder
   tempFolder = 'temp' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-  tempFolder = upload_folder + '\\' + tempFolder
+  #tempFolder = upload_folder + '\\' + tempFolder
+  tempFolder = upload_folder + '/' + tempFolder
   
   # This scans the directory in order to find zip files
   #for x in os.listdir(file_path):       #TODO REPLACE WITH A LAMBDA FUNCTION
@@ -43,6 +44,7 @@ def open_zip(file_path, upload_folder):
 
   # But we will parse the zip that has already been uploaded
   zip_path = file_path
+  print(zip_path)
   
   fantasy_zip = zipfile.ZipFile(zip_path)
   fantasy_zip.extractall(tempFolder)
