@@ -184,6 +184,7 @@ def compress_it(zip_name):
   print('compressing as')
   print(tempFolder + '/' + zip_name)
   fantasy_zip.close()
+  return tempFolder + '/'
 
 #open_zip(csv_path)
 #read_csv()

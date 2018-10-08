@@ -15,7 +15,6 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
-    from graph import tempFolder
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -33,12 +32,12 @@ def upload_file():
 
             open_zip(os.path.join(UPLOAD_FOLDER, filename), UPLOAD_FOLDER)
             read_csv()
-            compress_it(filename)
+            temp_folder = compress_it(filename)
             
             print('serving from')
-            print(tempFolder + '/' + filename)
+            print(temp_folder + '/' + filename)
             #return redirect('/uploads/' + filename)
-            return send_from_directory(tempFolder + '/',
+            return send_from_directory(temp_folder + '/',
                                filename, as_attachment=True)
 
             #delete_folder()
