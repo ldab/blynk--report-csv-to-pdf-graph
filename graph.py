@@ -181,8 +181,6 @@ def compress_it(zip_name):
           if file.endswith('.pdf'):
               fantasy_zip.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), tempFolder), compress_type = zipfile.ZIP_DEFLATED)
 
-  print('compressing as')
-  print(tempFolder + '/' + zip_name)
   fantasy_zip.close()
   return tempFolder + '/'
 
