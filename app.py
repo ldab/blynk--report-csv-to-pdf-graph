@@ -32,13 +32,19 @@ def upload_file():
 
             open_zip(os.path.join(UPLOAD_FOLDER, filename), UPLOAD_FOLDER)
             read_csv()
-            #temp_folder = compress_it(filename)
+            temp_folder = compress_it(filename)
             
-            return redirect('/uploads/' + filename)
+            @after_this_request
+            def any_func(response):
+                delete_folder()
+                return render_template('index.html', name='confirm')
+
+            return send_from_directory(temp_folder + '/',
+                               filename, as_attachment=True)
 
             #delete_folder()
 
-            return render_template('index.html', name='confirm')
+            #return render_template('index.html', name='confirm')
         
         else: return redirect('/error/File not Allowed')
     return render_template('index.html')
@@ -50,15 +56,10 @@ def error(name=None):
 
 @app.route('/uploads/<path:filename>')
 def download_file(filename):
-    @after_this_request
-    def delete_confirm(response):
-        delete_folder()
-        response = render_template('index.html', name='confirm')
-        return response
-
-    temp_folder = compress_it(filename)
-    print(temp_folder)
-    return send_from_directory(temp_folder + '/',
+    from graph import tempFolder
+    print(tempFolder)
+    #return send_file(filename, mimetype=None, as_attachment=True, filename, add_etags=False, cache_timeout=None, conditional=False, last_modified=None)
+    return send_from_directory(tempFolder + '/',
                                filename, as_attachment=True)
 
 if __name__ == "__main__":
