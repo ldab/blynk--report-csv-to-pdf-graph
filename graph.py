@@ -66,7 +66,7 @@ def read_csv():
     X, Y, table_row = [], [], []
     csv_filepath = ''
     csv_filepath = tempFolder + '/' + _csv
-    with open(csv_filepath, newline='', encoding='utf-16') as f:
+    with open(csv_filepath, newline='', encoding='utf-8') as f:
       reader = csv.reader(f)
       for row in reader:
         table_row.append(row)
