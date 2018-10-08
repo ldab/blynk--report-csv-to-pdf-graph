@@ -72,12 +72,11 @@ def read_csv():
         table_row.append(row)
         dt = datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S")
         X.append(dt)
-        if isinstance(row[1], str):
-          r_float = round(float(row[2]),1)
-          Y.append(r_float)
-        else:
+        try:
           r_float = round(float(row[1]),1)
-          Y.append(r_float)
+        except:
+          r_float = round(float(row[2]),1)
+        Y.append(r_float)
         #print(row)
     print_save(_csv, X, Y)
 
