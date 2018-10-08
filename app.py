@@ -34,7 +34,11 @@ def upload_file():
             read_csv()
             compress_it(filename)
             
+            print('serving from')
+            print(tempFolder + '/' + filename)
             #return redirect('/uploads/' + filename)
+            return send_from_directory(tempFolder + '/',
+                               filename, as_attachment=True)
 
             #delete_folder()
 
