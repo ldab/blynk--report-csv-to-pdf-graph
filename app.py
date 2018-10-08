@@ -34,7 +34,7 @@ def upload_file():
             read_csv()
             compress_it(filename)
             
-            return redirect('/uploads/' + filename)
+            #return redirect('/uploads/' + filename)
 
             #delete_folder()
 
