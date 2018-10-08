@@ -57,6 +57,7 @@ def download_file(filename):
         return response
 
     temp_folder = compress_it(filename)
+    print(temp_folder)
     return send_from_directory(temp_folder + '/',
                                filename, as_attachment=True)
 
