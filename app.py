@@ -2,7 +2,7 @@ import os
 import zipfile
 from flask import Flask, request, redirect, url_for, flash, render_template, send_from_directory
 from werkzeug.utils import secure_filename
-from graph import open_zip, read_csv, compress_it
+from graph import open_zip, read_csv, compress_it, delete_folder
 
 UPLOAD_FOLDER = os.path.dirname(os.path.realpath(__file__))
 ALLOWED_EXTENSIONS = set(['zip'])
@@ -33,14 +33,11 @@ def upload_file():
             open_zip(os.path.join(UPLOAD_FOLDER, filename), UPLOAD_FOLDER)
             read_csv()
             compress_it(filename)
+            
+            return redirect('/uploads/' + filename)
 
-            #download_file(filename)
+            #delete_folder()
 
-            #zip_ref = zipfile.ZipFile(os.path.join(UPLOAD_FOLDER, filename), 'r')
-            #zip_ref.extractall(UPLOAD_FOLDER)
-            #zip_ref.close()
-
-            #return redirect(url_for('upload_file', filename=filename))
             return render_template('index.html', name='confirm')
         
         else: return redirect('/error/File not Allowed')
@@ -51,8 +48,12 @@ def upload_file():
 def error(name=None):
     return render_template('error.html', name=name)
 
+@app.route('/uploads/<path:filename>')
 def download_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
+    from graph import tempFolder
+    print(tempFolder)
+    #return send_file(filename, mimetype=None, as_attachment=True, filename, add_etags=False, cache_timeout=None, conditional=False, last_modified=None)
+    return send_from_directory(tempFolder + '/',
                                filename, as_attachment=True)
 
 if __name__ == "__main__":

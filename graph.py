@@ -19,20 +19,18 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.ticker import AutoMinorLocator, MultipleLocator, FuncFormatter, LinearLocator, AutoLocator
 
-#csv_path = 'C:\\Users\\leonardo\\Downloads\\My Files\\' #ADD site path here
 tempFolder = ''
 zip_File = ''
 
 def open_zip(file_path, upload_folder):
   '''
-  Open zip file and extract to \new folder
+  Open zip file and extract to /new folder
   '''
   global zip_File
   global tempFolder
   
   #generate random number/name for new folder
   tempFolder = 'temp' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-  #tempFolder = upload_folder + '\\' + tempFolder
   tempFolder = upload_folder + '/' + tempFolder
   
   # This scans the directory in order to find zip files
@@ -182,8 +180,6 @@ def compress_it(zip_name):
       for file in files:
           if file.endswith('.pdf'):
               fantasy_zip.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), tempFolder), compress_type = zipfile.ZIP_DEFLATED)
-  
-  print('compressed and now saving')
 
   fantasy_zip.close()
 
@@ -191,8 +187,8 @@ def compress_it(zip_name):
 #read_csv()
 #compress_it()
 
-print('Removing temporary folder......')
-# DOWNLOAD COMPRESSED FILE!!!
-#shutil.rmtree(tempFolder)
+def delete_folder():
+  print('Removing temporary folder......')
+  shutil.rmtree(tempFolder)
 
 #TODO Create a date list in order to compare data and avoid plotting when no data is available
