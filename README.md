@@ -1,12 +1,11 @@
 # Convert Blynk reports into .PDF reports.
 
-___
-
 ## Using Flask, Python and Heroku.
 
 Created this app in order to converted .zip files generated from Reports widget from Blynk app to a graph on .pdf
 
-TODO, Known isses:
+TODO, Known issues:
+
 - [ ] Make it looks nicer;
 - [ ] Some of my devices export the .csv file as UTF-8 and UTF-16 causing confusion
 - [X] Working with "Device" and "DataStream" Reports option
