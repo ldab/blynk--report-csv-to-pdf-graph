@@ -50,19 +50,15 @@ def error(name=None):
     return render_template('error.html', name=name)
 
 @app.route('/success/')
-@app.route('/success/<filename>')
-def success(filename=None):
-    temp_folder = compress_it(filename)
-    #return render_template('index.html', name='confirm')
-    return send_from_directory(temp_folder + '/', filename, as_attachment=True)
+@app.route('/success/<name>')
+def success(name=None):
+    return render_template('index.html', name=name)
+    #return send_from_directory(temp_folder + '/', filename, as_attachment=True)
 
-@app.route('/uploads/<path:filename>')
+@app.route('/download_file/<filename>')
 def download_file(filename):
-    from graph import tempFolder
-    print(tempFolder)
-    #return send_file(filename, mimetype=None, as_attachment=True, filename, add_etags=False, cache_timeout=None, conditional=False, last_modified=None)
-    return send_from_directory(tempFolder + '/',
-                               filename, as_attachment=True)
+    temp_folder = compress_it(filename)
+    return send_from_directory(temp_folder + '/', filename, as_attachment=True)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -89,7 +89,10 @@
                 <div class="container">
             {% if name %}
                 <h1>UPLOAD SUCCESSFULY</h1>
-                <p><a href="/">Return Home</a></p>
+                <hr>
+                <a href="/download_file/{{ name }}"><img src="/static/download.jpg"></a>
+                Download .PDFs
+                <h5><a href="/">Return Home</a></p></h5>
             {% else %}
                 <h1> Flask upload zip file and unzip</h1>
                 <hr>
