@@ -30,7 +30,7 @@ def open_zip(file_path, upload_folder):
   global tempFolder
   
   #generate random number/name for new folder
-  tempFolder = 'temp' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+  tempFolder = 'tempo' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
   tempFolder = upload_folder + '/' + tempFolder
   
   # This scans the directory in order to find zip files
@@ -191,8 +191,9 @@ def compress_it(zip_name):
 #read_csv()
 #compress_it()
 
-def delete_folder():
-  print('Removing temporary folder......')
-  shutil.rmtree(tempFolder)
+def delete_folder(workingDir):
+  for folder in os.listdir(workingDir):
+    if folder.startswith('tempo'):
+      shutil.rmtree(folder)
 
 #TODO Create a date list in order to compare data and avoid plotting when no data is available
