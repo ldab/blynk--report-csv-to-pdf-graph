@@ -25,7 +25,7 @@
     }
     
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 450px}
+    .row.content {height: 540px}
     
     /* Set gray background color and 100% height */
     .sidenav {
@@ -65,13 +65,11 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">Contact</a></li>
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="https://community.blynk.cc/"><img src="https://static1.squarespace.com/static/54765ba7e4b0d055ee0b47a6/t/56faff7e2b8ddef24d364728/1459290007839/community_logo.png" width="132"></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <li><a href="https://github.com/ldab"><img src="/static/GitHub-Mark-Light-64px.png" width="32"></a></li>
       </ul>
     </div>
   </div>
@@ -90,9 +88,8 @@
             {% if name %}
                 <h1>UPLOAD SUCCESSFULY</h1>
                 <hr>
-                <a href="/download_file/{{ name }}"><img src="/static/download.jpg"></a>
-                Download .PDFs
-                <h5><a href="/">Return Home</a></p></h5>
+                <h2>Download .PDFs</h2>
+                <a href="/download_file/{{ name }}"><img src="/static/download.jpg"></a>           
             {% else %}
                 <h1> Flask upload zip file and unzip</h1>
                 <hr>
@@ -106,11 +103,12 @@
                 <input type=submit value=Upload>
             </form>
           {% endif %}
+
       <hr>
-      <h3>No data is stored on the server. Unzip the file and convert it to .pdf, return it compressed</h3>
+      <h3>No data is stored on the server. It only unzips the file and convert it to .pdf, you can download it and next time it will clean the temporary folder.</h3>
       <p></p>
       <p></p>
-      <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      <h6>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</h6>
     </div>
     <div class="col-sm-2 sidenav">
       <div class="well">
