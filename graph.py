@@ -3,7 +3,7 @@
 Open Zip file, plot the graph and save it as a pdf.
 '''
 
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 import statistics                     #calculate median
 import zipfile												#to manipulate zip
 import shutil, os											#to delete folder
@@ -118,15 +118,15 @@ def print_save(csv_doc, X, Y):
   ax.xaxis.set_minor_locator(AutoMinorLocator())
   #ax.xaxis.set_minor_locator(LinearLocator(31))
 
-  # Else if longer than a daily, Major = Days, Minor = Hours
-  if len(X) <= (60*24*7):
-    ax.xaxis.set_major_formatter(dateFmt)
-    ax.xaxis.set_minor_formatter(hourFmt)
-
-  # Else if longer than weekly, Major = Full date, Minor = day
-  else:
+  # If more than 7 days:
+  if (X[-1]-X[1] > timedelta(days=7)):
     ax.xaxis.set_major_formatter(dateFmt)
     ax.xaxis.set_minor_formatter(dayFmt)
+
+  # Else if longer than a daily, Major = Days, Minor = Hours
+  else:
+    ax.xaxis.set_major_formatter(dateFmt)
+    ax.xaxis.set_minor_formatter(hourFmt)
 
   ax.yaxis.set_major_locator(LinearLocator(10))
   #ax.yaxis.set_major_locator(AutoLocator())
