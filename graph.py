@@ -164,7 +164,7 @@ def print_save(csv_doc, X, Y):
   plt.setp(ax.xaxis.get_minorticklabels(), rotation=45)
 
   ax.grid(color='k', linestyle='-', linewidth=0.5)
-  ax.plot(X, Y)
+  ax.plot(X, Y, '.k')
 
   #do not need it if now displaying image
   #plt.show()
