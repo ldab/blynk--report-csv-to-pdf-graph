@@ -10,4 +10,4 @@ TODO, Known issues:
 - [ ] Some of my devices export the .csv file as UTF-8 and UTF-16 causing confusion
 - [X] Working with "Device" and "DataStream" Reports option
 - [ ] When using "Device" report to include data name to the Y label or to the legend
-- [ ] Delete files after downloading it
+- [X] Delete files after downloading it
