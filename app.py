@@ -57,7 +57,7 @@ def success(name=None):
 
 @app.route('/download_file/<filename>')
 def download_file(filename):
-    #temp_folder = compress_it(filename)
+    ##temp_folder = compress_it(filename)
     temp_folder = find_temp(UPLOAD_FOLDER)
     return send_from_directory(temp_folder + '/', filename, as_attachment=True)
 
