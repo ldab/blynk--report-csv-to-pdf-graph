@@ -30,12 +30,12 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-            delete_folder(UPLOAD_FOLDER)
+            #delete_folder(UPLOAD_FOLDER)
 
             open_zip(os.path.join(UPLOAD_FOLDER, filename), UPLOAD_FOLDER)
             read_csv()
             
-            #temp_folder = compress_it(filename)
+            temp_folder = compress_it(filename)
 
             #return render_template('index.html', name='confirm')
 
@@ -57,7 +57,7 @@ def success(name=None):
 
 @app.route('/download_file/<filename>')
 def download_file(filename):
-    temp_folder = compress_it(filename)
+    #temp_folder = compress_it(filename)
     return send_from_directory(temp_folder + '/', filename, as_attachment=True)
 
 if __name__ == "__main__":
