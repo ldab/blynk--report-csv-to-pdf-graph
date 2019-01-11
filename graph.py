@@ -196,4 +196,9 @@ def delete_folder(workingDir):
     if folder.startswith('tempo'):
       shutil.rmtree(folder)
 
+def find_temp(workingDir):
+  for folder in os.listdir(workingDir):
+    if folder.startswith('tempo'):
+      return folder
+
 #TODO Create a date list in order to compare data and avoid plotting when no data is available

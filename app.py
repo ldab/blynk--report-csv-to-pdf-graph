@@ -2,7 +2,7 @@ import os
 import zipfile
 from flask import Flask, request, redirect, url_for, flash, render_template, send_from_directory
 from werkzeug.utils import secure_filename
-from graph import open_zip, read_csv, compress_it, delete_folder
+from graph import open_zip, read_csv, compress_it, delete_folder, find_temp
 
 UPLOAD_FOLDER = os.path.dirname(os.path.realpath(__file__))
 ALLOWED_EXTENSIONS = set(['zip'])
@@ -35,7 +35,7 @@ def upload_file():
             open_zip(os.path.join(UPLOAD_FOLDER, filename), UPLOAD_FOLDER)
             read_csv()
             
-            #temp_folder = compress_it(filename)
+            temp_folder = compress_it(filename)
 
             #return render_template('index.html', name='confirm')
 
@@ -57,7 +57,8 @@ def success(name=None):
 
 @app.route('/download_file/<filename>')
 def download_file(filename):
-    temp_folder = compress_it(filename)
+    #temp_folder = compress_it(filename)
+    temp_folder = find_temp(UPLOAD_FOLDER)
     return send_from_directory(temp_folder + '/', filename, as_attachment=True)
 
 if __name__ == "__main__":
